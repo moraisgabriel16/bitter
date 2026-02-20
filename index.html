@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitter Brownie - Pedido Online</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dark-brown: #3d2321;
+            --soft-brown: #634133;
+            --gold: #b08d57;
+            --cream: #fffaf5;
+            --white: #ffffff;
+            --success: #25d366;
+            --disabled: #cbd5e0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--cream);
+            color: var(--dark-brown);
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 480px;
+            width: 100%;
+            background: var(--white);
+            padding: 25px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(61, 35, 33, 0.1);
+            text-align: center;
+        }
+
+        .logo { width: 100%; max-width: 180px; height: auto; margin-bottom: 5px; }
+        .subtitle { color: var(--gold); font-style: italic; font-size: 0.85rem; margin-bottom: 25px; display: block; }
+
+        .section-title {
+            text-align: left;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin: 25px 0 12px 5px;
+            border-left: 4px solid var(--gold);
+            padding-left: 10px;
+        }
+
+        .input-group { text-align: left; margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 0.85rem; margin-bottom: 5px; font-weight: 600; }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            background: #fafafa;
+            color: var(--dark-brown);
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus { border-color: var(--gold); background: #fff; }
+
+        .product-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #fff;
+            border: 2px solid #f8f8f8;
+            border-radius: 18px;
+            margin-bottom: 12px;
+            transition: 0.3s ease;
+        }
+
+        /* Classe ativa para quando houver quantidade */
+        .product-card.selected {
+            border-color: var(--gold);
+            background-color: #fffdfa;
+        }
+
+        .product-info { text-align: left; }
+        .product-name { font-weight: bold; display: block; font-size: 1rem; }
+        .product-price { color: var(--gold); font-weight: 600; }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            background: #f1f1f1;
+            border-radius: 50px;
+            padding: 4px 8px;
+            gap: 12px;
+        }
+
+        .qty-btn {
+            background: var(--gold);
+            color: white;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.1s;
+        }
+        .qty-btn:active { transform: scale(0.9); }
+
+        #campo-endereco { display: none; margin-top: 15px; }
+
+        .total-section {
+            margin-top: 25px;
+            background: var(--cream);
+            padding: 20px;
+            border-radius: 20px;
+        }
+
+        .total-price {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--dark-brown);
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .order-button {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+        }
+
+        .order-button:disabled { background-color: var(--disabled); cursor: not-allowed; }
+        .order-button:not(:disabled):hover { background-color: #1eb954; transform: translateY(-2px); }
+
+        .verse { font-size: 10px; margin-top: 25px; color: var(--gold); opacity: 0.8; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <img src="logo.jpg" alt="Bitter Brownie" class="logo">
+    <span class="subtitle">Sabor intenso, marcante e irresistível.</span>
+
+    <div class="input-group">
+        <label>Seu Nome:</label>
+        <input type="text" id="cliente-nome" placeholder="Como podemos te chamar?">
+    </div>
+
+    <div class="section-title">✨ Escolha suas delícias</div>
+
+    <div class="product-card" id="card-tradicional">
+        <div class="product-info">
+            <span class="product-name">🍰 Tradicional</span>
+            <span class="product-price">R$ 10,00</span>
+        </div>
+        <div class="quantity-controls">
+            <button class="qty-btn" onclick="updateQty('tradicional', -1)">-</button>
+            <span id="qty-tradicional" style="font-weight: bold; min-width: 20px;">0</span>
+            <button class="qty-btn" onclick="updateQty('tradicional', 1)">+</button>
+        </div>
+    </div>
+
+    <div class="product-card" id="card-nozes">
+        <div class="product-info">
+            <span class="product-name">🌰 Com Nozes</span>
+            <span class="product-price">R$ 12,00</span>
+        </div>
+        <div class="quantity-controls">
+            <button class="qty-btn" onclick="updateQty('nozes', -1)">-</button>
+            <span id="qty-nozes" style="font-weight: bold; min-width: 20px;">0</span>
+            <button class="qty-btn" onclick="updateQty('nozes', 1)">+</button>
+        </div>
+    </div>
+
+    <div class="section-title">🛵 Entrega e Pagamento</div>
+
+    <div class="input-group">
+        <label>Forma de Entrega:</label>
+        <select id="entrega" onchange="toggleEndereco()">
+            <option value="Retirada">🏪 Vou retirar com você</option>
+            <option value="Entrega">🛵 Quero que entregue (Consultar taxa)</option>
+        </select>
+        <div id="campo-endereco">
+            <input type="text" id="endereco-cliente" placeholder="Rua, número e bairro" style="margin-top: 10px;">
+        </div>
+    </div>
+
+    <div class="input-group">
+        <label>Forma de Pagamento:</label>
+        <select id="pagamento">
+            <option value="Pix">📱 Pix</option>
+            <option value="Cartão">💳 Cartão</option>
+            <option value="Dinheiro">💵 Dinheiro</option>
+        </select>
+    </div>
+
+    <div class="input-group">
+        <label>Observações (Opcional):</label>
+        <textarea id="obs" rows="2" placeholder="Ex: Sem adesivo, troco para R$ 50..."></textarea>
+    </div>
+
+    <div class="total-section">
+        <span style="font-size: 0.8rem; font-weight: 600;">Total do pedido:</span>
+        <span class="total-price" id="total-display">R$ 0,00</span>
+        <button class="order-button" id="btn-finalizar" onclick="sendWhatsApp()" disabled>
+            🛍️ Finalizar Pedido no WhatsApp
+        </button>
+    </div>
+    
+    <p class="verse">"Consagre ao Senhor tudo o que você faz, e os seus planos serão bem-sucedidos." <br> <b>Provérbios 16:3</b></p>
+</div>
+
+<script>
+    let quantities = { tradicional: 0, nozes: 0 };
+    const prices = { tradicional: 10, nozes: 12 };
+
+    function updateQty(item, change) {
+        quantities[item] = Math.max(0, quantities[item] + change);
+        document.getElementById(`qty-${item}`).innerText = quantities[item];
+        
+        // Feedback visual no card
+        const card = document.getElementById(`card-${item}`);
+        if (quantities[item] > 0) card.classList.add('selected');
+        else card.classList.remove('selected');
+
+        calculateTotal();
+    }
+
+    function calculateTotal() {
+        const total = (quantities.tradicional * prices.tradicional) + (quantities.nozes * prices.nozes);
+        document.getElementById('total-display').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        document.getElementById('btn-finalizar').disabled = total <= 0;
+    }
+
+    function toggleEndereco() {
+        const entrega = document.getElementById('entrega').value;
+        document.getElementById('campo-endereco').style.display = (entrega === 'Entrega') ? 'block' : 'none';
+    }
+
+    function sendWhatsApp() {
+        const nome = document.getElementById('cliente-nome').value.trim();
+        const entrega = document.getElementById('entrega').value;
+        const endereco = document.getElementById('endereco-cliente').value.trim();
+        const pagamento = document.getElementById('pagamento').value;
+        const obs = document.getElementById('obs').value.trim();
+
+        if (!nome) return alert("Por favor, informe seu nome.");
+        if (entrega === 'Entrega' && !endereco) return alert("Informe o endereço para entrega.");
+
+        const phone = "5534991064205"; 
+        let message = `*NOVO PEDIDO - BITTER BROWNIE*\n`;
+        message += `----------------------------------\n`;
+        message += `*Cliente:* ${nome}\n`;
+        message += `*Entrega:* ${entrega}\n`;
+        if(entrega === 'Entrega') message += `*Endereço:* ${endereco}\n`;
+        message += `*Pagamento:* ${pagamento}\n`;
+        if(obs) message += `*Obs:* ${obs}\n`;
+        message += `----------------------------------\n\n`;
+        message += `*ITENS:*\n`;
+        
+        if (quantities.tradicional > 0) message += `- ${quantities.tradicional}x Brownie Tradicional\n`;
+        if (quantities.nozes > 0) message += `- ${quantities.nozes}x Brownie com Nozes\n`;
+
+        const total = (quantities.tradicional * prices.tradicional) + (quantities.nozes * prices.nozes);
+        message += `\n*TOTAL: R$ ${total.toFixed(2).replace('.', ',')}*`;
+
+        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+    }
+</script>
+
+</body>
+</html>
