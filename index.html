@@ -79,7 +79,6 @@
             transition: 0.3s ease;
         }
 
-        /* Classe ativa para quando houver quantidade */
         .product-card.selected {
             border-color: var(--gold);
             background-color: #fffdfa;
@@ -187,6 +186,18 @@
         </div>
     </div>
 
+    <div class="product-card" id="card-ninho">
+        <div class="product-info">
+            <span class="product-name">🥛 Brigadeiro de Leite Ninho</span>
+            <span class="product-price">R$ 15,00</span>
+        </div>
+        <div class="quantity-controls">
+            <button class="qty-btn" onclick="updateQty('ninho', -1)">-</button>
+            <span id="qty-ninho" style="font-weight: bold; min-width: 20px;">0</span>
+            <button class="qty-btn" onclick="updateQty('ninho', 1)">+</button>
+        </div>
+    </div>
+
     <div class="section-title">🛵 Entrega e Pagamento</div>
 
     <div class="input-group">
@@ -226,14 +237,14 @@
 </div>
 
 <script>
-    let quantities = { tradicional: 0, nozes: 0 };
-    const prices = { tradicional: 10, nozes: 12 };
+    // Lógica de preços atualizada conforme cardápio
+    let quantities = { tradicional: 0, nozes: 0, ninho: 0 };
+    const prices = { tradicional: 10, nozes: 12, ninho: 15 };
 
     function updateQty(item, change) {
         quantities[item] = Math.max(0, quantities[item] + change);
         document.getElementById(`qty-${item}`).innerText = quantities[item];
         
-        // Feedback visual no card
         const card = document.getElementById(`card-${item}`);
         if (quantities[item] > 0) card.classList.add('selected');
         else card.classList.remove('selected');
@@ -242,7 +253,10 @@
     }
 
     function calculateTotal() {
-        const total = (quantities.tradicional * prices.tradicional) + (quantities.nozes * prices.nozes);
+        const total = (quantities.tradicional * prices.tradicional) + 
+                      (quantities.nozes * prices.nozes) + 
+                      (quantities.ninho * prices.ninho);
+        
         document.getElementById('total-display').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
         document.getElementById('btn-finalizar').disabled = total <= 0;
     }
@@ -275,8 +289,12 @@
         
         if (quantities.tradicional > 0) message += `- ${quantities.tradicional}x Brownie Tradicional\n`;
         if (quantities.nozes > 0) message += `- ${quantities.nozes}x Brownie com Nozes\n`;
+        if (quantities.ninho > 0) message += `- ${quantities.ninho}x Brownie de Leite Ninho\n`;
 
-        const total = (quantities.tradicional * prices.tradicional) + (quantities.nozes * prices.nozes);
+        const total = (quantities.tradicional * prices.tradicional) + 
+                      (quantities.nozes * prices.nozes) + 
+                      (quantities.ninho * prices.ninho);
+                      
         message += `\n*TOTAL: R$ ${total.toFixed(2).replace('.', ',')}*`;
 
         window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
