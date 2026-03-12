@@ -1,8 +1,10 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Bitter Brownie - Pedido Online</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -10,7 +12,7 @@
 <style>
 
 :root{
---dark:#3d2321;
+--brown:#3d2321;
 --gold:#b08d57;
 --cream:#fffaf5;
 --success:#25d366;
@@ -26,56 +28,56 @@ justify-content:center;
 }
 
 .container{
-max-width:480px;
 width:100%;
+max-width:500px;
 background:white;
 border-radius:25px;
-padding:25px;
-box-shadow:0 15px 30px rgba(0,0,0,0.08);
-text-align:center;
+padding:30px;
+box-shadow:0 12px 30px rgba(0,0,0,0.08);
 }
 
 h1{
-color:var(--dark);
-margin-bottom:5px;
+text-align:center;
+margin-bottom:4px;
+color:var(--brown);
 }
 
 .subtitle{
+text-align:center;
 color:var(--gold);
 font-size:14px;
-margin-bottom:20px;
+margin-bottom:25px;
 }
 
 .section{
-text-align:left;
-margin-top:20px;
 font-weight:600;
+margin:25px 0 10px;
 border-left:4px solid var(--gold);
 padding-left:10px;
-margin-bottom:10px;
 }
 
 .input-group{
 margin-bottom:15px;
-text-align:left;
 }
 
 input,select,textarea{
 width:100%;
-padding:10px;
+padding:12px;
 border-radius:10px;
 border:1px solid #eee;
 font-family:'Poppins';
+box-sizing:border-box;
 }
 
 .product{
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:12px;
-border-radius:15px;
+padding:15px;
+border-radius:16px;
 border:2px solid #f5f5f5;
-margin-bottom:10px;
+margin-bottom:12px;
+transition:0.2s;
 }
 
 .product.selected{
@@ -83,15 +85,29 @@ border-color:var(--gold);
 background:#fffdfa;
 }
 
+.product-info{
+display:flex;
+flex-direction:column;
+}
+
+.product-name{
+font-weight:500;
+}
+
+.product-price{
+font-weight:700;
+font-size:14px;
+}
+
 .qty{
 display:flex;
 align-items:center;
-gap:10px;
+gap:12px;
 }
 
-button.qtybtn{
-width:26px;
-height:26px;
+.qtybtn{
+width:28px;
+height:28px;
 border:none;
 border-radius:50%;
 background:var(--gold);
@@ -100,33 +116,41 @@ font-weight:bold;
 cursor:pointer;
 }
 
+.qty span{
+min-width:15px;
+text-align:center;
+font-weight:600;
+}
+
 .totalbox{
-margin-top:20px;
+margin-top:25px;
 background:#faf6f0;
 padding:20px;
 border-radius:15px;
+text-align:center;
 }
 
 .total{
-font-size:26px;
+font-size:28px;
 font-weight:800;
+margin:8px 0;
 }
 
 .orderbtn{
-margin-top:10px;
 width:100%;
-padding:15px;
-border:none;
+padding:16px;
 background:var(--success);
+border:none;
+border-radius:12px;
 color:white;
 font-size:16px;
-font-weight:bold;
-border-radius:12px;
+font-weight:700;
 cursor:pointer;
 }
 
 .orderbtn:disabled{
-background:#ccc;
+background:#cfcfcf;
+cursor:not-allowed;
 }
 
 #campo-endereco{
@@ -151,8 +175,14 @@ margin-top:10px;
 
 <div class="section">Escolha seus brownies</div>
 
+<!-- PRODUTO -->
+
 <div class="product" id="card-tradicional">
-<div>Brownie Tradicional<br><b>R$10</b></div>
+<div class="product-info">
+<span class="product-name">Brownie Tradicional</span>
+<span class="product-price">R$10</span>
+</div>
+
 <div class="qty">
 <button class="qtybtn" onclick="updateQty('tradicional',-1)">-</button>
 <span id="qty-tradicional">0</span>
@@ -160,8 +190,13 @@ margin-top:10px;
 </div>
 </div>
 
+
 <div class="product" id="card-nozes">
-<div>Brownie com Nozes<br><b>R$12</b></div>
+<div class="product-info">
+<span class="product-name">Brownie com Nozes</span>
+<span class="product-price">R$12</span>
+</div>
+
 <div class="qty">
 <button class="qtybtn" onclick="updateQty('nozes',-1)">-</button>
 <span id="qty-nozes">0</span>
@@ -169,8 +204,13 @@ margin-top:10px;
 </div>
 </div>
 
+
 <div class="product" id="card-ninho">
-<div>Brownie Leite Ninho<br><b>R$15</b></div>
+<div class="product-info">
+<span class="product-name">Brownie Leite Ninho</span>
+<span class="product-price">R$15</span>
+</div>
+
 <div class="qty">
 <button class="qtybtn" onclick="updateQty('ninho',-1)">-</button>
 <span id="qty-ninho">0</span>
@@ -178,8 +218,13 @@ margin-top:10px;
 </div>
 </div>
 
+
 <div class="product" id="card-brigadeiro">
-<div>Brownie Brigadeiro<br><b>R$15</b></div>
+<div class="product-info">
+<span class="product-name">Brownie Brigadeiro</span>
+<span class="product-price">R$15</span>
+</div>
+
 <div class="qty">
 <button class="qtybtn" onclick="updateQty('brigadeiro',-1)">-</button>
 <span id="qty-brigadeiro">0</span>
@@ -187,8 +232,13 @@ margin-top:10px;
 </div>
 </div>
 
+
 <div class="product" id="card-ninhobrig">
-<div>Brownie Ninho c/ Brigadeiro<br><b>R$15</b></div>
+<div class="product-info">
+<span class="product-name">Brownie Ninho c/ Brigadeiro</span>
+<span class="product-price">R$15</span>
+</div>
+
 <div class="qty">
 <button class="qtybtn" onclick="updateQty('ninhobrig',-1)">-</button>
 <span id="qty-ninhobrig">0</span>
@@ -196,8 +246,13 @@ margin-top:10px;
 </div>
 </div>
 
+
 <div class="product" id="card-bolinha">
-<div>Bolinha de Brownie<br><b>R$10</b></div>
+<div class="product-info">
+<span class="product-name">Bolinha de Brownie</span>
+<span class="product-price">R$10</span>
+</div>
+
 <div class="qty">
 <button class="qtybtn" onclick="updateQty('bolinha',-1)">-</button>
 <span id="qty-bolinha">0</span>
@@ -358,3 +413,4 @@ window.open("https://wa.me/"+phone+"?text="+encodeURIComponent(msg))
 
 </body>
 </html>
+```
