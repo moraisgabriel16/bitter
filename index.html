@@ -37,14 +37,12 @@ box-shadow:0 12px 30px rgba(0,0,0,0.08);
 
 h1{
 text-align:center;
-margin-bottom:4px;
 color:var(--brown);
 }
 
 .subtitle{
 text-align:center;
 color:var(--gold);
-font-size:14px;
 margin-bottom:25px;
 }
 
@@ -55,19 +53,6 @@ border-left:4px solid var(--gold);
 padding-left:10px;
 }
 
-.input-group{
-margin-bottom:15px;
-}
-
-input,select,textarea{
-width:100%;
-padding:12px;
-border-radius:10px;
-border:1px solid #eee;
-font-family:'Poppins';
-box-sizing:border-box;
-}
-
 .product{
 display:flex;
 justify-content:space-between;
@@ -76,7 +61,6 @@ padding:15px;
 border-radius:16px;
 border:2px solid #f5f5f5;
 margin-bottom:12px;
-transition:0.2s;
 }
 
 .product.selected{
@@ -89,13 +73,8 @@ display:flex;
 flex-direction:column;
 }
 
-.product-name{
-font-weight:500;
-}
-
 .product-price{
 font-weight:700;
-font-size:14px;
 }
 
 .qty{
@@ -115,12 +94,6 @@ font-weight:bold;
 cursor:pointer;
 }
 
-.qty span{
-min-width:15px;
-text-align:center;
-font-weight:600;
-}
-
 .totalbox{
 margin-top:25px;
 background:#faf6f0;
@@ -132,7 +105,6 @@ text-align:center;
 .total{
 font-size:28px;
 font-weight:800;
-margin:8px 0;
 }
 
 .orderbtn{
@@ -142,19 +114,24 @@ background:var(--success);
 border:none;
 border-radius:12px;
 color:white;
-font-size:16px;
-font-weight:700;
+font-weight:bold;
 cursor:pointer;
 }
 
 .orderbtn:disabled{
-background:#cfcfcf;
-cursor:not-allowed;
+background:#ccc;
+}
+
+input,select,textarea{
+width:100%;
+padding:12px;
+border-radius:10px;
+border:1px solid #eee;
+margin-bottom:10px;
 }
 
 #campo-endereco{
 display:none;
-margin-top:10px;
 }
 
 </style>
@@ -167,101 +144,32 @@ margin-top:10px;
 <h1>Bitter Brownie</h1>
 <div class="subtitle">Sabor intenso, marcante e irresistível</div>
 
-<div class="input-group">
-<label>Seu nome</label>
-<input id="nome">
-</div>
+<input id="nome" placeholder="Seu nome">
 
 <div class="section">Escolha seus brownies</div>
 
-<!-- PRODUTO -->
+<!-- PRODUTOS -->
 
-<div class="product" id="card-tradicional">
-<div class="product-info">
-<span class="product-name">Brownie Tradicional</span>
-<span class="product-price">R$10</span>
-</div>
+<script>
+const produtos = {
+tradicional:{nome:"Brownie Tradicional",preco:10},
+nozes:{nome:"Brownie com Nozes",preco:12},
+ninho:{nome:"Brownie Recheado com Leite Ninho",preco:20},
+brigadeiro:{nome:"Brownie Recheado com Brigadeiro",preco:20},
+ninhobrig:{nome:"Brownie Ninho com Brigadeiro",preco:20},
+nutella:{nome:"Brownie de Nutella",preco:20},
+ninhonutella:{nome:"Brownie Ninho com Nutella",preco:20},
+bolinha:{nome:"Bolinha de Brownie",preco:15}
+};
 
-<div class="qty">
-<button class="qtybtn" onclick="updateQty('tradicional',-1)">-</button>
-<span id="qty-tradicional">0</span>
-<button class="qtybtn" onclick="updateQty('tradicional',1)">+</button>
-</div>
-</div>
+let q={};
+for(let i in produtos){ q[i]=0; }
+</script>
 
-
-<div class="product" id="card-nozes">
-<div class="product-info">
-<span class="product-name">Brownie com Nozes</span>
-<span class="product-price">R$12</span>
-</div>
-
-<div class="qty">
-<button class="qtybtn" onclick="updateQty('nozes',-1)">-</button>
-<span id="qty-nozes">0</span>
-<button class="qtybtn" onclick="updateQty('nozes',1)">+</button>
-</div>
-</div>
-
-
-<div class="product" id="card-ninho">
-<div class="product-info">
-<span class="product-name">Brownie Leite Ninho</span>
-<span class="product-price">R$15</span>
-</div>
-
-<div class="qty">
-<button class="qtybtn" onclick="updateQty('ninho',-1)">-</button>
-<span id="qty-ninho">0</span>
-<button class="qtybtn" onclick="updateQty('ninho',1)">+</button>
-</div>
-</div>
-
-
-<div class="product" id="card-brigadeiro">
-<div class="product-info">
-<span class="product-name">Brownie Brigadeiro</span>
-<span class="product-price">R$15</span>
-</div>
-
-<div class="qty">
-<button class="qtybtn" onclick="updateQty('brigadeiro',-1)">-</button>
-<span id="qty-brigadeiro">0</span>
-<button class="qtybtn" onclick="updateQty('brigadeiro',1)">+</button>
-</div>
-</div>
-
-
-<div class="product" id="card-ninhobrig">
-<div class="product-info">
-<span class="product-name">Brownie Ninho c/ Brigadeiro</span>
-<span class="product-price">R$15</span>
-</div>
-
-<div class="qty">
-<button class="qtybtn" onclick="updateQty('ninhobrig',-1)">-</button>
-<span id="qty-ninhobrig">0</span>
-<button class="qtybtn" onclick="updateQty('ninhobrig',1)">+</button>
-</div>
-</div>
-
-
-<div class="product" id="card-bolinha">
-<div class="product-info">
-<span class="product-name">Bolinha de Brownie</span>
-<span class="product-price">R$10</span>
-</div>
-
-<div class="qty">
-<button class="qtybtn" onclick="updateQty('bolinha',-1)">-</button>
-<span id="qty-bolinha">0</span>
-<button class="qtybtn" onclick="updateQty('bolinha',1)">+</button>
-</div>
-</div>
+<div id="lista"></div>
 
 <div class="section">Entrega</div>
 
-<div class="input-group">
 <select id="entrega" onchange="toggleEndereco()">
 <option value="Retirada">Retirada</option>
 <option value="Entrega">Entrega</option>
@@ -270,53 +178,48 @@ margin-top:10px;
 <div id="campo-endereco">
 <input id="endereco" placeholder="Rua, número e bairro">
 </div>
-</div>
 
-<div class="input-group">
-<label>Pagamento</label>
 <select id="pagamento">
 <option>Pix</option>
 <option>Cartão</option>
 <option>Dinheiro</option>
 </select>
-</div>
 
-<div class="input-group">
-<label>Observações</label>
-<textarea id="obs"></textarea>
-</div>
+<textarea id="obs" placeholder="Observações"></textarea>
 
 <div class="totalbox">
-
 <div>Total</div>
 <div class="total" id="total">R$0,00</div>
-
-<button class="orderbtn" id="btn" onclick="send()" disabled>
+<button id="btn" class="orderbtn" onclick="send()" disabled>
 Finalizar Pedido no WhatsApp
 </button>
-
 </div>
 
 </div>
 
 <script>
 
-let q={
-tradicional:0,
-nozes:0,
-ninho:0,
-brigadeiro:0,
-ninhobrig:0,
-bolinha:0
-}
+// gerar produtos dinamicamente
+const lista = document.getElementById("lista");
 
-let p={
-tradicional:10,
-nozes:12,
-ninho:15,
-brigadeiro:15,
-ninhobrig:15,
-bolinha:10
+for(let key in produtos){
+
+const p = produtos[key];
+
+lista.innerHTML += `
+<div class="product" id="card-${key}">
+<div class="product-info">
+<span>${p.nome}</span>
+<span class="product-price">R$${p.preco}</span>
+</div>
+
+<div class="qty">
+<button class="qtybtn" onclick="updateQty('${key}',-1)">-</button>
+<span id="qty-${key}">0</span>
+<button class="qtybtn" onclick="updateQty('${key}',1)">+</button>
+</div>
+</div>
+`;
 }
 
 function updateQty(i,c){
@@ -331,7 +234,6 @@ if(q[i]>0)card.classList.add("selected")
 else card.classList.remove("selected")
 
 calc()
-
 }
 
 function calc(){
@@ -339,22 +241,17 @@ function calc(){
 let t=0
 
 for(let i in q){
-t+=q[i]*p[i]
+t+=q[i]*produtos[i].preco
 }
 
 document.getElementById("total").innerText="R$ "+t.toFixed(2).replace(".",",")
 
 document.getElementById("btn").disabled=t<=0
-
 }
 
 function toggleEndereco(){
-
-let e=document.getElementById("entrega").value
-
-document.getElementById("campo-endereco").style.display=
-e==="Entrega"?"block":"none"
-
+document.getElementById("campo-endereco").style.display =
+document.getElementById("entrega").value==="Entrega"?"block":"none";
 }
 
 function send(){
@@ -365,46 +262,36 @@ let endereco=document.getElementById("endereco").value
 let pag=document.getElementById("pagamento").value
 let obs=document.getElementById("obs").value
 
-if(!nome){
-alert("Informe seu nome")
-return
-}
-
-if(entrega==="Entrega" && !endereco){
-alert("Informe o endereço")
-return
-}
-
-let phone="5534991064205"
+if(!nome){ alert("Informe seu nome"); return; }
+if(entrega==="Entrega" && !endereco){ alert("Informe o endereço"); return; }
 
 let msg="🧁 *NOVO PEDIDO - BITTER BROWNIE*\n\n"
 
-msg+="👤 *Cliente:* "+nome+"\n"
-msg+="🛍 *Entrega:* "+entrega+"\n"
+msg+=`👤 *Cliente:* ${nome}\n`
+msg+=`🛍 *Entrega:* ${entrega}\n`
 
 if(entrega==="Entrega")
-msg+="📍 *Endereço:* "+endereco+"\n"
+msg+=`📍 *Endereço:* ${endereco}\n`
 
-msg+="💳 *Pagamento:* "+pag+"\n"
+msg+=`💳 *Pagamento:* ${pag}\n`
 
 if(obs)
-msg+="📝 *Obs:* "+obs+"\n"
+msg+=`📝 *Obs:* ${obs}\n`
 
 msg+="\n📦 *ITENS*\n"
 
-if(q.tradicional)msg+="• "+q.tradicional+"x Brownie Tradicional\n"
-if(q.nozes)msg+="• "+q.nozes+"x Brownie com Nozes\n"
-if(q.ninho)msg+="• "+q.ninho+"x Brownie Leite Ninho\n"
-if(q.brigadeiro)msg+="• "+q.brigadeiro+"x Brownie Brigadeiro\n"
-if(q.ninhobrig)msg+="• "+q.ninhobrig+"x Brownie Ninho c/ Brigadeiro\n"
-if(q.bolinha)msg+="• "+q.bolinha+"x Bolinha de Brownie\n"
+for(let i in q){
+if(q[i]>0){
+msg+=`• ${q[i]}x ${produtos[i].nome}\n`
+}
+}
 
 let t=0
-for(let i in q){t+=q[i]*p[i]}
+for(let i in q){ t+=q[i]*produtos[i].preco }
 
-msg+="\n💰 *TOTAL: R$ "+t.toFixed(2).replace(".",",")+"*"
+msg+=`\n💰 *TOTAL: R$ ${t.toFixed(2).replace('.',',')}*`
 
-window.open("https://wa.me/"+phone+"?text="+encodeURIComponent(msg))
+window.open("https://wa.me/5534991064205?text="+encodeURIComponent(msg))
 
 }
 
