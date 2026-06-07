@@ -3,68 +3,326 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bitter Brownie</title>
+<title>Bitter Brownie - Pedido Online</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+ 
 <style>
-body{font-family:Arial,sans-serif;background:#fffaf5;margin:0;padding:20px}
-.container{max-width:900px;margin:auto;background:#fff;padding:20px;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,.1)}
-h1{text-align:center;color:#3d2321}
-.section{margin-top:20px;padding-bottom:8px;border-bottom:2px solid #b08d57;color:#3d2321}
-.product{display:flex;justify-content:space-between;align-items:center;padding:10px;border:1px solid #eee;margin:8px 0;border-radius:10px}
-.qty button{width:30px;height:30px}
-.total{position:sticky;bottom:0;background:#fff;padding:15px;border-top:2px solid #b08d57;font-size:24px;font-weight:bold}
-button.send{width:100%;padding:14px;background:#25d366;color:white;border:none;border-radius:10px}
+:root{
+  --brown:#3d2321;
+  --gold:#b08d57;
+  --cream:#fffaf5;
+  --success:#25d366;
+}
+ 
+body{
+  font-family:'Poppins',sans-serif;
+  background:var(--cream);
+  margin:0;
+  padding:20px;
+  display:flex;
+  justify-content:center;
+}
+ 
+.container{
+  width:100%;
+  max-width:500px;
+  background:white;
+  border-radius:25px;
+  padding:30px;
+  box-shadow:0 12px 30px rgba(0,0,0,0.08);
+}
+ 
+h1{
+  text-align:center;
+  color:var(--brown);
+  margin-bottom:4px;
+}
+ 
+.subtitle{
+  text-align:center;
+  color:var(--gold);
+  margin-bottom:25px;
+}
+ 
+.section{
+  font-weight:600;
+  margin:25px 0 10px;
+  border-left:4px solid var(--gold);
+  padding-left:10px;
+  color:var(--brown);
+}
+ 
+.category-label{
+  font-size:12px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  color:var(--gold);
+  margin:20px 0 8px;
+}
+ 
+.product{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px;
+  border-radius:16px;
+  border:2px solid #f5f5f5;
+  margin-bottom:12px;
+}
+ 
+.product.selected{
+  border-color:var(--gold);
+  background:#fffdfa;
+}
+ 
+.product-info{
+  display:flex;
+  flex-direction:column;
+}
+ 
+.product-name{
+  font-size:14px;
+  color:var(--brown);
+}
+ 
+.product-price{
+  font-weight:700;
+  color:var(--gold);
+  font-size:13px;
+}
+ 
+.qty{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+ 
+.qtybtn{
+  width:28px;
+  height:28px;
+  border:none;
+  border-radius:50%;
+  background:var(--gold);
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  font-size:16px;
+  line-height:1;
+}
+ 
+.totalbox{
+  margin-top:25px;
+  background:#faf6f0;
+  padding:20px;
+  border-radius:15px;
+  text-align:center;
+}
+ 
+.total{
+  font-size:28px;
+  font-weight:800;
+  color:var(--brown);
+}
+ 
+.orderbtn{
+  width:100%;
+  padding:16px;
+  background:var(--success);
+  border:none;
+  border-radius:12px;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  font-size:15px;
+  margin-top:12px;
+}
+ 
+.orderbtn:disabled{
+  background:#ccc;
+  cursor:not-allowed;
+}
+ 
+input,select,textarea{
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #eee;
+  margin-bottom:10px;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
+ 
+#campo-endereco{
+  display:none;
+}
 </style>
 </head>
+ 
 <body>
 <div class="container">
-<h1>Bitter Brownie</h1>
-<input id="nome" placeholder="Seu nome" style="width:100%;padding:10px">
-<div id="produtos"></div>
-<div class="total">
-Total: <span id="total">R$ 0,00</span>
-<button class="send" onclick="enviar()">Finalizar no WhatsApp</button>
+ 
+  <h1>Bitter Brownie</h1>
+  <div class="subtitle">Sabor intenso, marcante e irresistível</div>
+ 
+  <input id="nome" placeholder="Seu nome">
+ 
+  <div class="section">Escolha seus produtos</div>
+ 
+  <div id="lista"></div>
+ 
+  <div class="section">Entrega</div>
+ 
+  <select id="entrega" onchange="toggleEndereco()">
+    <option value="Retirada">Retirada</option>
+    <option value="Entrega">Entrega</option>
+  </select>
+ 
+  <div id="campo-endereco">
+    <input id="endereco" placeholder="Rua, número e bairro">
+  </div>
+ 
+  <select id="pagamento">
+    <option>Pix</option>
+    <option>Cartão</option>
+    <option>Dinheiro</option>
+  </select>
+ 
+  <textarea id="obs" placeholder="Observações"></textarea>
+ 
+  <div class="totalbox">
+    <div>Total</div>
+    <div class="total" id="total">R$ 0,00</div>
+    <button id="btn" class="orderbtn" onclick="send()" disabled>
+      Finalizar Pedido no WhatsApp
+    </button>
+  </div>
+ 
 </div>
-</div>
+ 
 <script>
-const produtos={
-tradicional:["Brownie Tradicional",8,"Brownies"],
-nozes:["Brownie com Nozes",10,"Brownies"],
-ninho:["Brownie Recheado Ninho",12,"Brownies"],
-brigadeiro:["Brownie Recheado Brigadeiro",12,"Brownies"],
-nutella:["Brownie Recheado Nutella",12,"Brownies"],
-ferreiro:["Brownie Recheado Ferreiro",12,"Brownies"],
-kinder:["Brownie Recheado Kinder",12,"Brownies"],
-copoMorango:["Copo da Felicidade Morango",22,"Copos"],
-copoNutella:["Copo da Felicidade Nutella",22,"Copos"],
-copoFerreiro:["Copo da Felicidade Ferreiro",22,"Copos"],
-copoKinder:["Copo da Felicidade Kinder",22,"Copos"],
-hambMorango:["Hambúrguer de Morango",30,"Hambúrgueres"],
-hambNutella:["Hambúrguer de Nutella",30,"Hambúrgueres"],
-hambFerreiro:["Hambúrguer de Ferreiro",30,"Hambúrgueres"]
-};
-const q={};
-const div=document.getElementById('produtos');
-['Brownies','Copos','Hambúrgueres'].forEach(sec=>{
-div.innerHTML+=`<h2 class="section">${sec}</h2>`;
-for(const k in produtos){
-if(produtos[k][2]!==sec) continue;
-q[k]=0;
-div.innerHTML+=`<div class="product"><div>${produtos[k][0]}<br>R$ ${produtos[k][1].toFixed(2).replace('.',',')}</div>
-<div class="qty"><button onclick="alt('${k}',-1)">-</button>
-<span id="q_${k}">0</span>
-<button onclick="alt('${k}',1)">+</button></div></div>`;
-}
+const categorias = [
+  {
+    label: "🍫 Brownies",
+    produtos: {
+      tradicional:  { nome: "Brownie Tradicional",          preco: 8  },
+      nozes:        { nome: "Brownie com Nozes",             preco: 10 },
+      ninho:        { nome: "Brownie Recheado Ninho",        preco: 12 },
+      brigadeiro:   { nome: "Brownie Recheado Brigadeiro",   preco: 12 },
+      nutella:      { nome: "Brownie Recheado Nutella",      preco: 12 },
+      ferreiro:     { nome: "Brownie Recheado Ferreiro",     preco: 12 },
+      kinder:       { nome: "Brownie Recheado Kinder",       preco: 12 },
+    }
+  },
+  {
+    label: "🍓 Copo da Felicidade",
+    produtos: {
+      copoMorango:  { nome: "Copo da Felicidade de Morango", preco: 22 },
+      copoNutella:  { nome: "Copo da Felicidade de Nutella", preco: 22 },
+      copoFerreiro: { nome: "Copo da Felicidade de Ferreiro",preco: 22 },
+      copoKinder:   { nome: "Copo da Felicidade de Kinder",  preco: 22 },
+    }
+  },
+  {
+    label: "🍔 Hambúrguer de Brownie",
+    produtos: {
+      hambMorango:  { nome: "Hambúrguer de Morango",         preco: 30 },
+      hambNutella:  { nome: "Hambúrguer de Nutella",         preco: 30 },
+      hambFerreiro: { nome: "Hambúrguer de Ferreiro",        preco: 30 },
+    }
+  }
+];
+ 
+// Mapas planos para acesso por key
+const produtos = {};
+categorias.forEach(cat => {
+  Object.assign(produtos, cat.produtos);
 });
-function alt(k,v){q[k]=Math.max(0,q[k]+v);document.getElementById('q_'+k).innerText=q[k];calc();}
-function calc(){let t=0;for(const k in q)t+=q[k]*produtos[k][1];document.getElementById('total').innerText='R$ '+t.toFixed(2).replace('.',',');}
-function enviar(){
-let nome=document.getElementById('nome').value||'Cliente';
-let msg='🧁 *NOVO PEDIDO - BITTER BROWNIE*\n\n👤 '+nome+'\n\n📦 *ITENS*\n';
-let total=0;
-for(const k in q){if(q[k]>0){msg+='• '+q[k]+'x '+produtos[k][0]+'\n';total+=q[k]*produtos[k][1];}}
-msg+='\n💰 *TOTAL: R$ '+total.toFixed(2).replace('.',',')+'*';
-window.open('https://wa.me/5534991064205?text='+encodeURIComponent(msg));
+ 
+const q = {};
+for (let i in produtos) { q[i] = 0; }
+ 
+// Renderizar lista por categoria
+const lista = document.getElementById("lista");
+ 
+categorias.forEach(cat => {
+  const label = document.createElement("div");
+  label.className = "category-label";
+  label.textContent = cat.label;
+  lista.appendChild(label);
+ 
+  for (let key in cat.produtos) {
+    const p = cat.produtos[key];
+    const div = document.createElement("div");
+    div.className = "product";
+    div.id = "card-" + key;
+    div.innerHTML = `
+      <div class="product-info">
+        <span class="product-name">${p.nome}</span>
+        <span class="product-price">R$ ${p.preco.toFixed(2).replace(".",",")}</span>
+      </div>
+      <div class="qty">
+        <button class="qtybtn" onclick="updateQty('${key}',-1)">−</button>
+        <span id="qty-${key}">0</span>
+        <button class="qtybtn" onclick="updateQty('${key}',1)">+</button>
+      </div>
+    `;
+    lista.appendChild(div);
+  }
+});
+ 
+function updateQty(i, c) {
+  q[i] = Math.max(0, q[i] + c);
+  document.getElementById("qty-" + i).innerText = q[i];
+  const card = document.getElementById("card-" + i);
+  if (q[i] > 0) card.classList.add("selected");
+  else card.classList.remove("selected");
+  calc();
+}
+ 
+function calc() {
+  let t = 0;
+  for (let i in q) { t += q[i] * produtos[i].preco; }
+  document.getElementById("total").innerText = "R$ " + t.toFixed(2).replace(".", ",");
+  document.getElementById("btn").disabled = t <= 0;
+}
+ 
+function toggleEndereco() {
+  document.getElementById("campo-endereco").style.display =
+    document.getElementById("entrega").value === "Entrega" ? "block" : "none";
+}
+ 
+function send() {
+  const nome     = document.getElementById("nome").value;
+  const entrega  = document.getElementById("entrega").value;
+  const endereco = document.getElementById("endereco").value;
+  const pag      = document.getElementById("pagamento").value;
+  const obs      = document.getElementById("obs").value;
+ 
+  if (!nome) { alert("Informe seu nome"); return; }
+  if (entrega === "Entrega" && !endereco) { alert("Informe o endereço"); return; }
+ 
+  let msg = "🧁 *NOVO PEDIDO - BITTER BROWNIE*\n\n";
+  msg += `👤 *Cliente:* ${nome}\n`;
+  msg += `🛍 *Entrega:* ${entrega}\n`;
+  if (entrega === "Entrega") msg += `📍 *Endereço:* ${endereco}\n`;
+  msg += `💳 *Pagamento:* ${pag}\n`;
+  if (obs) msg += `📝 *Obs:* ${obs}\n`;
+ 
+  msg += "\n📦 *ITENS*\n";
+  for (let i in q) {
+    if (q[i] > 0) {
+      msg += `• ${q[i]}x ${produtos[i].nome}\n`;
+    }
+  }
+ 
+  let t = 0;
+  for (let i in q) { t += q[i] * produtos[i].preco; }
+  msg += `\n💰 *TOTAL: R$ ${t.toFixed(2).replace(".", ",")}*`;
+ 
+  window.open("https://wa.me/5534991064205?text=" + encodeURIComponent(msg));
 }
 </script>
+ 
 </body>
 </html>
